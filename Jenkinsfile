@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // must match Jenkins credentials ID
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
 
     stages {
@@ -26,9 +26,14 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Login Docker Hub') {
             steps {
                 sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
                 sh 'docker-compose push'
             }
         }
@@ -36,19 +41,13 @@ pipeline {
 
     post {
         always {
-            steps {                   // ✅ steps block is required
-                sh 'docker-compose down'
-            }
+            sh 'docker-compose down'
         }
         success {
-            steps {
-                echo 'Pipeline completed successfully!'
-            }
+            echo 'Pipeline completed successfully!'
         }
         failure {
-            steps {
-                echo 'Pipeline failed. Check console output.'
-            }
+            echo 'Pipeline failed. Check console output.'
         }
     }
 }
