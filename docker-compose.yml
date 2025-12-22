@@ -1,24 +1,30 @@
-version: "3.8"
+version: '3.8'
+
 services:
   frontend:
     build: ./frontend
+    container_name: todo_frontend
     ports:
       - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://backend:5000
     depends_on:
       - backend
 
   backend:
     build: ./backend
+    container_name: todo_backend
     ports:
       - "5000:5000"
     environment:
-      MONGO_URI: mongodb://mongodb:27017/todo_db
+      - MONGO_URI=mongodb://mongo:27017/tododb
+      - FLASK_ENV=development
     depends_on:
-      - mongodb
+      - mongo
 
-  mongodb:
+  mongo:
     image: mongo:6
-    container_name: mongodb
+    container_name: todo_mongo
     ports:
       - "27017:27017"
     volumes:
