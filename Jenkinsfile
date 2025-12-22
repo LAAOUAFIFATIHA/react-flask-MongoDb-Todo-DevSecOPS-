@@ -2,54 +2,57 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-id')
-        GITHUB_CREDENTIALS = credentials('github-token-id')
-        BACKEND_IMAGE = "laaouafifatiha/todo-backend"
-        FRONTEND_IMAGE = "laaouafifatiha/todo-frontend"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Jenkins stored creds
+        GITHUB_TOKEN = credentials('github-token') // Optional if repo is private
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', credentialsId: 'github-token-id', url: 'https://github.com/LAAOUAFIFATIHA/react-flask-MongoDb-Todo-DevSecOPS-'
+                git branch: 'main', url: 'https://github.com/LAAOUAFIFATIHA/react-flask-MongoDb-Todo-DevSecOPS-.git'
             }
         }
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker-compose build'
+                script {
+                    sh 'docker-compose build'
+                }
             }
         }
 
-        stage('Run Tests') {
+        stage('Test Locally') {
             steps {
-                sh 'docker-compose up -d'
-                sh 'docker ps'
+                script {
+                    sh 'docker-compose up -d'
+                    sh 'sleep 10' // Wait for containers to start
+                    sh 'docker ps' // Simple check
+                    // Optional: Add curl commands to test endpoints
+                }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                sh """
-                echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-                docker tag backend:latest $BACKEND_IMAGE:latest
-                docker tag frontend:latest $FRONTEND_IMAGE:latest
-                docker push $BACKEND_IMAGE:latest
-                docker push $FRONTEND_IMAGE:latest
-                """
-            }
-        }
-
-        stage('Cleanup') {
-            steps {
-                sh 'docker-compose down'
+                script {
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    sh 'docker-compose push'
+                }
             }
         }
     }
 
     post {
         always {
-            sh 'docker system prune -f'
+            script {
+                sh 'docker-compose down'
+            }
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check console output.'
         }
     }
 }
