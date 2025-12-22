@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // must match Jenkins credentials ID
     }
 
     stages {
@@ -36,13 +36,19 @@ pipeline {
 
     post {
         always {
-            sh 'docker-compose down'
+            steps {                   // ✅ steps block is required
+                sh 'docker-compose down'
+            }
         }
         success {
-            echo 'Pipeline completed successfully!'
+            steps {
+                echo 'Pipeline completed successfully!'
+            }
         }
         failure {
-            echo 'Pipeline failed. Check console output.'
+            steps {
+                echo 'Pipeline failed. Check console output.'
+            }
         }
     }
 }
