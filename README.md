@@ -79,21 +79,37 @@ react-flask-mongodb-todo-devsecops/
 
 
 ---
-
-## ▶️ How to Run Locally
-
-1️⃣ Clone the repository
+#### 1️⃣ Clone the repository
+```bash
 git clone https://github.com/LAAOUAFIFATIHA/react-flask-MongoDb-Todo-DevSecOPS.git
 cd react-flask-MongoDb-Todo-DevSecOPS
+```
 
-2️⃣ Run the application
+#### 2️⃣ Run the application
+```bash
 docker-compose up --build
+```
 
-3️⃣ Access the application
-Frontend: http://localhost:3000
-Backend API: http://localhost:5000
+#### 3️⃣ Access the application
+- **Frontend:** [http://localhost:3000](http://localhost:3000)
+- **Backend API:** [http://localhost:5000](http://localhost:5000)
 
-Frontend: http://localhost:3000
+## 📦 Tech Stack
 
-Backend API: http://localhost:5000
+- **Frontend:** React
+- **Backend:** Flask
+- **Database:** MongoDB
+- **Containerization:** Docker & Docker Compose
+
+## 🛠️ Development
+
+To stop the application:
+```bash
+docker-compose down
+```
+
+To rebuild and restart:
+```bash
+docker-compose up --build
+```
 
