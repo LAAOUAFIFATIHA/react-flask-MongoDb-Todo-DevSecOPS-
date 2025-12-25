@@ -22,6 +22,55 @@ The application allows users to:
 
 ---
 
+---
+
+## 🛠️ Tech Stack
+
+### 🎨 Frontend
+- ⚛️ React.js
+- 🌐 Axios
+- 🎨 HTML5 / CSS3 / JavaScript
+
+### 🔧 Backend
+- 🐍 Flask (Python)
+- 🔐 JWT Authentication
+- 🌍 RESTful APIs
+
+### 🗄️ Database
+- 🍃 MongoDB
+
+### 🚀 DevOps / DevSecOps
+- 🐳 Docker
+- 🧪 Automated Testing
+- 🔄 Jenkins Pipeline
+- 🔐 Secure credentials management
+
+---
+
+## 🔐 Security Features
+
+- JWT-based authentication
+- Secure API endpoints
+- Environment-based secrets handling
+- DevSecOps mindset integrated into CI/CD
+
+---
+
+## ⚙️ CI/CD Pipeline (Jenkins)
+
+The Jenkins pipeline automates:
+1. Source code checkout from GitHub
+2. Dependency installation
+3. Application build
+4. Docker image creation
+5. (Optional) Push image to Docker Hub
+6. Automated testing
+
+---
+
+## 📂 Project Structure
+
+
 
 ## 🧱 Architecture Overview
 
