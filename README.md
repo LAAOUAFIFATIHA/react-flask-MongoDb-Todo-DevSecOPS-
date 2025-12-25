@@ -22,8 +22,6 @@ The application allows users to:
 
 ---
 
----
-
 ## 🛠️ Tech Stack
 
 ### 🎨 Frontend
@@ -70,7 +68,24 @@ The Jenkins pipeline automates:
 
 ## 📂 Project Structure
 
+react-flask-mongodb-todo-devsecops/
+│
+├── frontend/ # React application
+├── backend/ # Flask API
+├── Jenkinsfile # CI/CD pipeline
+├── Dockerfile # Containerization
+├── docker-compose.yml
+└── README.md
 
 
-## 🧱 Architecture Overview
+---
+
+## ▶️ How to Run Locally
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/LAAOUAFIFATIHA/react-flask-MongoDb-Todo-DevSecOPS.git
+cd react-flask-MongoDb-Todo-DevSecOPS
+docker-compose up --build
+
 
