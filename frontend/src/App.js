@@ -1,41 +1,51 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './AuthContext';
+import Login from './pages/Login';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminScanView from './pages/AdminScanView';
+import WorkerPortal from './pages/WorkerPortal';
+import './App.css';
+
+const ProtectedRoute = ({ children, role }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <Navigate to="/login" />;
+  if (role && user.role !== role) return <Navigate to="/" />;
+
+  return children;
+};
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [taskName, setTaskName] = useState("");
-
-  useEffect(() => {
-    axios.get("http://localhost:5000/tasks").then(res => setTasks(res.data));
-  }, []);
-
-  const addTask = () => {
-    if (!taskName) return;
-    axios.post("http://localhost:5000/tasks", { name: taskName }).then(res => {
-      setTasks([...tasks, { _id: res.data._id, name: taskName }]);
-      setTaskName("");
-    });
-  };
-
-  const deleteTask = (id) => {
-    axios.delete(`http://localhost:5000/tasks/${id}`).then(() => {
-      setTasks(tasks.filter(task => task._id !== id));
-    });
-  };
-
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>TODO List</h1>
-      <input value={taskName} onChange={e => setTaskName(e.target.value)} placeholder="New task" />
-      <button onClick={addTask}>Add</button>
-      <ul>
-        {tasks.map(task => (
-          <li key={task._id}>
-            {task.name} <button onClick={() => deleteTask(task._id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+
+          <Route path="/admin" element={
+            <ProtectedRoute role="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin/scan/:id" element={
+            <ProtectedRoute role="admin">
+              <AdminScanView />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/worker/scan/:id" element={
+            <ProtectedRoute>
+              <WorkerPortal />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/" element={<Navigate to="/login" />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
